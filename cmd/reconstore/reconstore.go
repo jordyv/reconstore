@@ -22,8 +22,8 @@ var (
 
 func init() {
 	flaggy.SetName("reconstore")
+	flaggy.SetDescription("Reconstore is a tool to save and query your recon data")
 	flaggy.SetVersion("1.0.0")
-	flaggy.ShowHelpOnUnexpectedEnable()
 	flaggy.Bool(&debug, "d", "debug", "Debug output")
 	flaggy.String(&dbFile, "f", "database", "Database file")
 	flaggy.Parse()

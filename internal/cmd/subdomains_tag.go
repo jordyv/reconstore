@@ -34,7 +34,6 @@ func (c *TagSubdomainsCmd) Handle() {
 
 		var subdomain entities.Subdomain
 		if r := db.Where("domain = ?", string(l)).First(&subdomain); r.Error == nil {
-
 			tagEntities := make([]*entities.Tag, 0)
 			for _, t := range tags {
 				if t != "" {
@@ -44,6 +43,7 @@ func (c *TagSubdomainsCmd) Handle() {
 				}
 			}
 			subdomain.Tags = append(subdomain.Tags, tagEntities...)
+			logrus.Printf("Tagged %s", subdomain.Domain)
 			db.Save(&subdomain)
 		}
 	}
