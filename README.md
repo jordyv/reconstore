@@ -63,3 +63,4 @@ reconstore subdomains query --pattern docs
 - [ ] GraphQL API
 - [ ] Web interface
 - [ ] Support for Nuclei output - automatically tag subdomains with nuclei template IDs
+- [ ] DNS support - automatically fetch and store DNS records for subdomains which are stored
