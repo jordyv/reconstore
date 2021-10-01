@@ -38,12 +38,12 @@ cat nuclei | grep wordpress | cut -d ' ' -f 2 | reconstore subdomains tag -t wor
 This will add a tag 'wordpress' to all already existing subdomains (this won't store new subdomains, only existing subdomains are tagged).
 
 #### Query subdomains
-Only subdomains from a single program
+Only subdomains from a single program:
 ```
 reconstore subdomains query --slug tesla
 ```
 
-Only subdomains with a paying program
+Only subdomains with a paying program:
 ```
 reconstore subdomains query --bounties
 ```
@@ -53,7 +53,7 @@ Subdomains with a tag:
 reconstore subdomains query --tag wordpress
 ```
 
-Subdomains with a search query
+Subdomains with a search query:
 ```
 reconstore subdomains query --pattern docs
 ```
