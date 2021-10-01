@@ -6,7 +6,7 @@ your own recon database. All information is stored in a Sqlite file so you can r
 ## Installation
 
 ```
-go get -u github.com/jordyv/reconstore/cmd/reconstore/reconstore.go
+go get -u github.com/jordyv/reconstore/cmd/reconstore
 ```
 
 ## Usage
