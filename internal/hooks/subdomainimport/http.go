@@ -2,6 +2,7 @@ package subdomainimport
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/gocolly/colly"
 	"github.com/jordyv/reconstore/internal/entities"
@@ -9,6 +10,8 @@ import (
 )
 
 var (
+	defaultTimeout = time.Second * 3
+
 	collyConfig = []func(*colly.Collector){
 		colly.ParseHTTPErrorResponse(),
 	}
@@ -33,6 +36,7 @@ func (h *HTTP) AfterSave(s *entities.Subdomain) error {
 	httpAddr := fmt.Sprintf("http://%s", s.Domain)
 
 	httpsScraper := colly.NewCollector(collyConfig...)
+	httpsScraper.SetRequestTimeout(defaultTimeout)
 	httpsScraper.OnResponse(func(r *colly.Response) {
 		httpInfo.HTTPSStatusCode = r.StatusCode
 		if s := r.Headers.Get("Server"); s != "" {
@@ -48,6 +52,7 @@ func (h *HTTP) AfterSave(s *entities.Subdomain) error {
 	httpsScraper.Visit(httpsAddr)
 
 	httpScraper := colly.NewCollector(collyConfig...)
+	httpScraper.SetRequestTimeout(defaultTimeout)
 	httpScraper.OnResponse(func(r *colly.Response) {
 		httpInfo.HTTPSStatusCode = r.StatusCode
 		if s := r.Headers.Get("Server"); httpInfo.WebServer == "" && s != "" {

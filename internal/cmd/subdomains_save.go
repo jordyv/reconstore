@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io"
 	"os"
+	"sync"
 
 	"github.com/jordyv/reconstore/internal/entities"
 	"github.com/jordyv/reconstore/internal/hooks"
@@ -19,6 +20,8 @@ func (c *SaveSubdomainsCmd) ShouldHandle() bool {
 func (c *SaveSubdomainsCmd) Handle() {
 	c.validate()
 
+	wg := sync.WaitGroup{}
+
 	var program entities.Program
 	db.Where("slug = ?", saveProgramSlug).Find(&program)
 
@@ -33,21 +36,29 @@ func (c *SaveSubdomainsCmd) Handle() {
 			logrus.WithError(err).Fatal("error while reading stdin")
 		}
 		domain := string(l)
-		var countExisting int64
-		db.Model(&entities.Subdomain{}).Where("domain = ?", domain).Count(&countExisting)
-		if countExisting == 0 {
-			s := &entities.Subdomain{
-				Domain:  domain,
-				Program: program,
+		wg.Add(1)
+
+		go func() {
+			var countExisting int64
+			db.Model(&entities.Subdomain{}).Where("domain = ?", domain).Count(&countExisting)
+			if countExisting == 0 {
+				s := &entities.Subdomain{
+					Domain:  domain,
+					Program: program,
+				}
+				db.Create(s)
+
+				hooks.TriggerAfterSubdomainSave(s)
+
+				logrus.Infof("Saved %s", domain)
+				count++
 			}
-			db.Create(s)
-
-			hooks.TriggerAfterSubdomainSave(s)
-
-			logrus.Infof("Saved %s", domain)
-			count++
-		}
+			wg.Done()
+		}()
 	}
+
+	wg.Wait()
+
 	logrus.Infof("Stored %d new subdomains", count)
 }
 
