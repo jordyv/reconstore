@@ -7,6 +7,7 @@ import (
 	"github.com/integrii/flaggy"
 	"github.com/jordyv/reconstore/internal/cmd"
 	"github.com/jordyv/reconstore/internal/entities"
+	"github.com/jordyv/reconstore/internal/hooks"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -52,6 +53,7 @@ func main() {
 	migrate()
 
 	cmd.Init(db)
+	hooks.Init(db)
 
 	for _, c := range cmd.Commands {
 		if c.ShouldHandle() {

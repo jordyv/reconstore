@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/jordyv/reconstore/internal/entities"
+	"github.com/jordyv/reconstore/internal/hooks"
 	"github.com/sirupsen/logrus"
 )
 
@@ -35,10 +36,14 @@ func (c *SaveSubdomainsCmd) Handle() {
 		var countExisting int64
 		db.Model(&entities.Subdomain{}).Where("domain = ?", domain).Count(&countExisting)
 		if countExisting == 0 {
-			db.Create(&entities.Subdomain{
+			s := &entities.Subdomain{
 				Domain:  domain,
 				Program: program,
-			})
+			}
+			db.Create(s)
+
+			hooks.TriggerAfterSave(s)
+
 			logrus.Infof("Saved %s", domain)
 			count++
 		}

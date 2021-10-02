@@ -8,4 +8,6 @@ type Subdomain struct {
 	ProgramID int
 	Program   Program
 	Tags      []*Tag `gorm:"many2many:subdomain_tags;"`
+	DNSInfoID int
+	DNSInfo   DNSInfo
 }
