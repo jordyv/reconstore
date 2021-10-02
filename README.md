@@ -60,7 +60,10 @@ reconstore subdomains query --pattern docs
 
 ## Planned features
 
+- [ ] DNS resolution on import of subdomains
+- [ ] Query DNS info
+- [ ] HTTP info - webserver, status code, title
+- [ ] Techs to tags - scrape HTTP, fetch technologies and store in DB
+- [ ] Import nmap port scan results
 - [ ] GraphQL API
 - [ ] Web interface
-- [ ] Support for Nuclei output - automatically tag subdomains with nuclei template IDs
-- [ ] DNS support - automatically fetch and store DNS records for subdomains which are stored
