@@ -20,10 +20,11 @@ var (
 func Init(db *gorm.DB) {
 	afterSaveHooks = []Hook{
 		subdomainimport.NewDNS(db),
+		subdomainimport.NewHTTP(db),
 	}
 }
 
-func TriggerAfterSave(s *entities.Subdomain) {
+func TriggerAfterSubdomainSave(s *entities.Subdomain) {
 	wg := sync.WaitGroup{}
 
 	for _, h := range afterSaveHooks {

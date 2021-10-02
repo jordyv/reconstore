@@ -42,7 +42,7 @@ func (c *SaveSubdomainsCmd) Handle() {
 			}
 			db.Create(s)
 
-			hooks.TriggerAfterSave(s)
+			hooks.TriggerAfterSubdomainSave(s)
 
 			logrus.Infof("Saved %s", domain)
 			count++

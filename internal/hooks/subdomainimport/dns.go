@@ -1,34 +1,35 @@
 package subdomainimport
 
 import (
-	"fmt"
 	"strings"
 
+	"github.com/jordyv/reconstore/internal/dns"
 	"github.com/jordyv/reconstore/internal/entities"
-	"github.com/miekg/dns"
+	dnslib "github.com/miekg/dns"
+
 	"gorm.io/gorm"
 )
 
 var (
-	dnsServer = "8.8.8.8:53"
+	dnsServers = []string{"8.8.8.8:53", "8.8.1.1:53", "1.1.1.1:53"}
 )
 
 type DNS struct {
 	db        *gorm.DB
-	dnsClient *dns.Client
+	dnsClient dns.Client
 }
 
 func NewDNS(db *gorm.DB) *DNS {
 	return &DNS{
 		db:        db,
-		dnsClient: new(dns.Client),
+		dnsClient: dns.NewFallbackClient(dnsServers),
 	}
 }
 
 func (d *DNS) AfterSave(s *entities.Subdomain) error {
 	dnsInfo := entities.DNSInfo{}
 
-	cnameResult, err := d.query(s.Domain, dns.TypeCNAME)
+	cnameResult, err := d.query(s.Domain, dnslib.TypeCNAME)
 	if err != nil {
 		return err
 	}
@@ -36,11 +37,11 @@ func (d *DNS) AfterSave(s *entities.Subdomain) error {
 		dnsInfo.CnameRecord = cnameResult.Answer[0].String()
 	}
 
-	aResult, err := d.query(s.Domain, dns.TypeA)
+	aResult, err := d.query(s.Domain, dnslib.TypeA)
 	if err != nil {
 		return err
 	}
-	dnsInfo.Status = dns.RcodeToString[aResult.Rcode]
+	dnsInfo.Status = dnslib.RcodeToString[aResult.Rcode]
 	if len(aResult.Answer) > 0 {
 		aRecords := []string{}
 		for _, a := range aResult.Answer {
@@ -49,7 +50,7 @@ func (d *DNS) AfterSave(s *entities.Subdomain) error {
 		dnsInfo.ARecords = strings.Join(aRecords, ",")
 	}
 
-	nsResult, err := d.query(s.Domain, dns.TypeNS)
+	nsResult, err := d.query(s.Domain, dnslib.TypeNS)
 	if err != nil {
 		return err
 	}
@@ -67,12 +68,6 @@ func (d *DNS) AfterSave(s *entities.Subdomain) error {
 	return nil
 }
 
-func (d *DNS) query(value string, dnsMsgType uint16) (*dns.Msg, error) {
-	m := new(dns.Msg)
-	m.SetQuestion(dns.Fqdn(value), uint16(dnsMsgType))
-	r, _, err := d.dnsClient.Exchange(m, dnsServer)
-	if err != nil {
-		return nil, fmt.Errorf("could not get %s record - %w", dns.TypeToString[dnsMsgType], err)
-	}
-	return r, nil
+func (d *DNS) query(value string, dnsMsgType uint16) (*dnslib.Msg, error) {
+	return d.dnsClient.Query(value, dnsMsgType)
 }

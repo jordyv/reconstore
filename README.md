@@ -62,7 +62,7 @@ reconstore subdomains query --pattern docs
 
 - [x] DNS resolution on import of subdomains
 - [ ] Query DNS info
-- [ ] HTTP info - webserver, status code, title
+- [x] HTTP info - webserver, status code, title
 - [ ] Techs to tags - scrape HTTP, fetch technologies and store in DB
 - [ ] Import nmap port scan results
 - [ ] GraphQL API
