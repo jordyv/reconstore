@@ -17,6 +17,7 @@ var (
 		&SaveSubdomainsCmd{},
 		&QuerySubdomainsCmd{},
 		&TagSubdomainsCmd{},
+		&JsonSubdomainsCmd{},
 	}
 )
 
