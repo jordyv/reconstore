@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"encoding/json"
-	"fmt"
+	"os"
 
 	"github.com/jordyv/reconstore/internal/entities"
 	"github.com/sirupsen/logrus"
@@ -32,10 +32,8 @@ func (c *JsonSubdomainsCmd) Handle() {
 		results = append(results, s)
 	}
 
-	b, err := json.Marshal(results)
-	if err != nil {
+	j := json.NewEncoder(os.Stdout)
+	if err := j.Encode(results); err != nil {
 		logrus.WithError(err).Fatal("could not encode result set to JSON")
 	}
-
-	fmt.Println(string(b))
 }

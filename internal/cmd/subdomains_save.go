@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"bufio"
-	"io"
 	"os"
+	"strings"
 	"sync"
 
 	"github.com/jordyv/reconstore/internal/entities"
@@ -20,43 +20,46 @@ func (c *SaveSubdomainsCmd) ShouldHandle() bool {
 func (c *SaveSubdomainsCmd) Handle() {
 	c.validate()
 
-	wg := sync.WaitGroup{}
-
 	var program entities.Program
 	db.Where("slug = ?", saveProgramSlug).Find(&program)
 
+	lines := make(chan string)
+
 	var count = 0
-	buf := bufio.NewReader(os.Stdin)
-	for {
-		l, _, err := buf.ReadLine()
-		if err != nil {
-			if err == io.EOF {
-				break
-			}
-			logrus.WithError(err).Fatal("error while reading stdin")
-		}
-		domain := string(l)
+
+	wg := sync.WaitGroup{}
+	for i := 0; i < saveThreads; i++ {
 		wg.Add(1)
 
 		go func() {
-			var countExisting int64
-			db.Model(&entities.Subdomain{}).Where("domain = ?", domain).Count(&countExisting)
-			if countExisting == 0 {
-				s := &entities.Subdomain{
-					Domain:  domain,
-					Program: program,
+			for line := range lines {
+				domain := strings.TrimSpace(strings.ToLower(line))
+
+				var countExisting int64
+				db.Model(&entities.Subdomain{}).Where("domain = ?", domain).Count(&countExisting)
+				if countExisting == 0 {
+					s := &entities.Subdomain{
+						Domain:  domain,
+						Program: program,
+					}
+					db.Create(s)
+
+					hooks.TriggerAfterSubdomainSave(s)
+
+					logrus.Infof("Saved %s", domain)
+					count++
 				}
-				db.Create(s)
-
-				hooks.TriggerAfterSubdomainSave(s)
-
-				logrus.Infof("Saved %s", domain)
-				count++
 			}
 			wg.Done()
 		}()
 	}
 
+	buf := bufio.NewScanner(os.Stdin)
+	for buf.Scan() {
+		lines <- buf.Text()
+	}
+
+	close(lines)
 	wg.Wait()
 
 	logrus.Infof("Stored %d new subdomains", count)

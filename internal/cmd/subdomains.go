@@ -16,6 +16,7 @@ var (
 	tagSubdomainsCmd   *flaggy.Subcommand
 	jsonSubdomainsCmd  *flaggy.Subcommand
 
+	saveThreads     int = 12
 	saveProgramSlug string
 
 	queryProgramSlug, queryDomainLike, queryTag string
@@ -29,6 +30,7 @@ func init() {
 
 	saveSubdomainsCmd = flaggy.NewSubcommand("save")
 	saveSubdomainsCmd.String(&saveProgramSlug, "p", "program", "Program slug")
+	saveSubdomainsCmd.Int(&saveThreads, "t", "threads", "Number of threads")
 	subdomainsCmd.AttachSubcommand(saveSubdomainsCmd, 1)
 
 	querySubdomainsCmd = flaggy.NewSubcommand("query")
