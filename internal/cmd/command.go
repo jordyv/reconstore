@@ -17,8 +17,11 @@ var (
 		&SaveSubdomainsCmd{},
 		&QuerySubdomainsCmd{},
 		&TagSubdomainsCmd{},
-		&JsonSubdomainsCmd{},
+		&JsonCmd{},
 	}
+
+	queryProgramSlug, queryDomainLike, queryTag string
+	queryHasBounties, queryPrivate              bool
 )
 
 func Init(d *gorm.DB) {

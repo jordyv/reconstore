@@ -58,6 +58,14 @@ Subdomains with a search query:
 reconstore subdomains query --pattern docs
 ```
 
+#### JSON output
+This will output all Tesla subdomains in the database as JSON:
+```
+reconstore json --slug tesla
+```
+
+You can use the same queries as for the `subdomains query` command. 
+
 ## Planned features
 
 - [x] DNS resolution on import of subdomains

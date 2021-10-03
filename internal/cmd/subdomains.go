@@ -14,13 +14,9 @@ var (
 	saveSubdomainsCmd  *flaggy.Subcommand
 	querySubdomainsCmd *flaggy.Subcommand
 	tagSubdomainsCmd   *flaggy.Subcommand
-	jsonSubdomainsCmd  *flaggy.Subcommand
 
 	saveThreads     int = 12
 	saveProgramSlug string
-
-	queryProgramSlug, queryDomainLike, queryTag string
-	queryHasBounties, queryPrivate              bool
 
 	tags []string
 )
@@ -45,18 +41,10 @@ func init() {
 	tagSubdomainsCmd.StringSlice(&tags, "t", "tags", "Tags to add to subdomain")
 	subdomainsCmd.AttachSubcommand(tagSubdomainsCmd, 1)
 
-	jsonSubdomainsCmd = flaggy.NewSubcommand("json")
-	jsonSubdomainsCmd.String(&queryProgramSlug, "s", "slug", "Program slug")
-	jsonSubdomainsCmd.String(&queryDomainLike, "p", "pattern", "Domain pattern")
-	jsonSubdomainsCmd.String(&queryTag, "t", "tag", "Query by tag")
-	jsonSubdomainsCmd.Bool(&queryHasBounties, "b", "bounties", "Belongs to a paying program")
-	jsonSubdomainsCmd.Bool(&queryPrivate, "z", "private", "Belongs to a private program")
-	subdomainsCmd.AttachSubcommand(jsonSubdomainsCmd, 1)
-
 	flaggy.AttachSubcommand(subdomainsCmd, 1)
 }
 
-func applyQueryFilters(d *gorm.DB) {
+func applySubdomainQueryFilters(d *gorm.DB) {
 	if queryProgramSlug != "" {
 		var program entities.Program
 		p := db.Where("slug = ?", queryProgramSlug).First(&program)

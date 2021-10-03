@@ -32,7 +32,7 @@ func init() {
 
 func main() {
 	var err error
-	logMode := logger.Error
+	logMode := logger.Silent
 	if debug {
 		logMode = logger.Info
 	}

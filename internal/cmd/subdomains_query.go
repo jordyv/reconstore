@@ -16,7 +16,7 @@ func (c *QuerySubdomainsCmd) ShouldHandle() bool {
 func (c *QuerySubdomainsCmd) Handle() {
 	d := db.Model(&entities.Subdomain{}).Joins("Program")
 
-	applyQueryFilters(d)
+	applySubdomainQueryFilters(d)
 
 	r, err := d.Rows()
 	if err != nil {
