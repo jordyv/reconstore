@@ -7,6 +7,7 @@ require (
 	github.com/gocolly/colly v1.2.0
 	github.com/integrii/flaggy v1.4.4
 	github.com/miekg/dns v1.1.43
+	github.com/projectdiscovery/wappalyzergo v0.0.87
 	github.com/rodaine/table v1.0.1
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/viper v1.15.0

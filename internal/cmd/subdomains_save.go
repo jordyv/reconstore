@@ -25,7 +25,8 @@ func (c *SaveSubdomainsCmd) Handle() {
 
 	lines := make(chan string)
 
-	var count = 0
+	var newCount = 0
+	var updateCount = 0
 
 	wg := sync.WaitGroup{}
 	for i := 0; i < saveThreads; i++ {
@@ -37,20 +38,35 @@ func (c *SaveSubdomainsCmd) Handle() {
 
 				var countExisting int64
 				db.Model(&entities.Subdomain{}).Where("domain = ?", domain).Count(&countExisting)
+
+				var newSubdomain bool
+				var s entities.Subdomain
 				if countExisting == 0 {
-					s := &entities.Subdomain{
+					newSubdomain = true
+					s = entities.Subdomain{
 						Domain: domain,
 					}
-					if program.ID != 0 {
-						s.Program = &program
-					}
-					db.Create(s)
-
-					hooks.TriggerAfterSubdomainSave(s)
-
-					logrus.Infof("Saved %s", domain)
-					count++
+				} else if countExisting > 0 && update {
+					newSubdomain = false
+					db.Model(&entities.Subdomain{}).Joins("HTTPInfo").Joins("DNSInfo").Where("domain = ?", domain).Find(&s)
+				} else {
+					continue
 				}
+				if program.ID != 0 {
+					s.Program = &program
+				}
+
+				if newSubdomain {
+					db.Create(&s)
+					newCount++
+				} else {
+					db.Save(&s)
+					updateCount++
+				}
+
+				hooks.TriggerAfterSubdomainSave(&s)
+
+				logrus.Infof("Saved %s", domain)
 			}
 			wg.Done()
 		}()
@@ -64,7 +80,7 @@ func (c *SaveSubdomainsCmd) Handle() {
 	close(lines)
 	wg.Wait()
 
-	logrus.Infof("Stored %d new subdomains", count)
+	logrus.Infof("Stored %d new subdomains, updated %d subdomains", newCount, updateCount)
 }
 
 func (c *SaveSubdomainsCmd) validate() {

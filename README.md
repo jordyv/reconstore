@@ -75,7 +75,7 @@ You can use the same queries as for the `subdomains query` command.
 - [x] DNS resolution on import of subdomains
 - [x] Query DNS info
 - [x] HTTP info - webserver, status code, title
-- [ ] Techs to tags - scrape HTTP, fetch technologies and store in DB
+- [x] Techs to tags - scrape HTTP, fetch technologies and store in DB
 - [ ] Import nmap port scan results
 - [ ] (GraphQL) API
 - [ ] Web interface

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-
 	"github.com/integrii/flaggy"
 	"github.com/jordyv/reconstore/internal/entities"
 	"github.com/sirupsen/logrus"
@@ -17,6 +16,7 @@ var (
 
 	saveThreads     int = 12
 	saveProgramSlug string
+	update          bool
 
 	tags []string
 )
@@ -26,6 +26,7 @@ func init() {
 
 	saveSubdomainsCmd = flaggy.NewSubcommand("save")
 	saveSubdomainsCmd.String(&saveProgramSlug, "p", "program", "Program slug")
+	saveSubdomainsCmd.Bool(&update, "u", "update", "Update if already stored")
 	saveSubdomainsCmd.Int(&saveThreads, "t", "threads", "Number of threads")
 	subdomainsCmd.AttachSubcommand(saveSubdomainsCmd, 1)
 
@@ -33,6 +34,7 @@ func init() {
 	querySubdomainsCmd.String(&queryProgramSlug, "s", "slug", "Program slug")
 	querySubdomainsCmd.String(&queryDomainLike, "p", "pattern", "Domain pattern")
 	querySubdomainsCmd.String(&queryTag, "t", "tag", "Query by tag")
+	querySubdomainsCmd.String(&queryTech, "e", "tech", "Query by tech")
 	querySubdomainsCmd.Bool(&queryHasBounties, "b", "bounties", "Belongs to a paying program")
 	querySubdomainsCmd.Bool(&queryPrivate, "z", "private", "Belongs to a private program")
 	subdomainsCmd.AttachSubcommand(querySubdomainsCmd, 1)
@@ -70,6 +72,10 @@ func applySubdomainQueryFilters(d *gorm.DB) {
 
 	if queryTag != "" {
 		d.Joins("LEFT JOIN subdomain_tags ON subdomains.id = subdomain_tags.subdomain_id LEFT JOIN tags ON tags.id = subdomain_tags.tag_id").Where("tags.name = ?", queryTag)
+	}
+
+	if queryTech != "" {
+		d.Joins("LEFT JOIN subdomain_techs ON subdomains.id = subdomain_techs.subdomain_id LEFT JOIN techs ON techs.id = subdomain_techs.tech_id").Where("techs.name LIKE ?", fmt.Sprintf("%%%s%%", queryTech))
 	}
 }
 

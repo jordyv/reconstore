@@ -80,4 +80,7 @@ func migrate() {
 	db.AutoMigrate(&entities.Program{})
 	db.AutoMigrate(&entities.Subdomain{})
 	db.AutoMigrate(&entities.Tag{})
+	db.AutoMigrate(&entities.DNSInfo{})
+	db.AutoMigrate(&entities.HTTPInfo{})
+	db.AutoMigrate(&entities.Tech{})
 }

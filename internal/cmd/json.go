@@ -30,21 +30,14 @@ func (c *JsonCmd) ShouldHandle() bool {
 }
 
 func (c *JsonCmd) Handle() {
-	d := db.Model(&entities.Subdomain{}).Joins("Program").Joins("HTTPInfo").Joins("DNSInfo")
+	d := db.Model(&entities.Subdomain{}).Joins("Program").Joins("HTTPInfo").Joins("DNSInfo").Preload("Tags").Preload("Techs")
 
 	applySubdomainQueryFilters(d)
 
-	results := make([]entities.Subdomain, 0)
-	r, err := d.Rows()
+	var results []entities.Subdomain
+	err := d.Find(&results).Error
 	if err != nil {
 		logrus.Error(err.Error())
-	}
-
-	defer r.Close()
-	for r.Next() {
-		var s entities.Subdomain
-		db.ScanRows(r, &s)
-		results = append(results, s)
 	}
 
 	j := json.NewEncoder(os.Stdout)

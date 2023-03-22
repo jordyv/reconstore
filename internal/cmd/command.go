@@ -13,17 +13,17 @@ var (
 	Commands = []Cmd{
 		&AddProgramsCmd{},
 		&ListProgramsCmd{},
-		&ProgramsCmd{},
 		&DeleteProgramsCmd{},
+		&ProgramsCmd{},
 		&SaveSubdomainsCmd{},
 		&QuerySubdomainsCmd{},
-		&SubdomainsCmd{},
 		&TagSubdomainsCmd{},
+		&SubdomainsCmd{},
 		&JsonCmd{},
 	}
 
-	queryProgramSlug, queryDomainLike, queryTag string
-	queryHasBounties, queryPrivate              bool
+	queryProgramSlug, queryDomainLike, queryTag, queryTech string
+	queryHasBounties, queryPrivate                         bool
 )
 
 func Init(d *gorm.DB) {
