@@ -17,6 +17,7 @@ var (
 	db *gorm.DB
 
 	debug                bool
+	configFile           string
 	dbType, dbConnString string
 )
 
@@ -24,10 +25,15 @@ func init() {
 	flaggy.SetName("reconstore")
 	flaggy.SetDescription("Reconstore is a tool to save and query your recon data")
 	flaggy.SetVersion("1.0.0")
+	flaggy.String(&configFile, "c", "config", "Config file")
 	flaggy.Bool(&debug, "d", "debug", "Debug output")
 	flaggy.Parse()
 
-	config.Initialize()
+	if configFile == "" {
+		configFile = "reconstore.yaml"
+	}
+
+	config.Initialize(configFile)
 	dbType = config.GetString(config.DBType)
 	dbConnString = config.GetString(config.DBConnectionString)
 }
