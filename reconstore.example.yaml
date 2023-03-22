@@ -1,0 +1,7 @@
+db:
+  # can be postgres or sqlite
+  type: postgres
+
+  # For postgres: "host=localhost user=postgres password=password dbname=reconstore" (see https://github.com/go-gorm/postgres)
+  # For sqlite: use path to database file
+  connection: "host=localhost user=postgres password=password dbname=reconstore"

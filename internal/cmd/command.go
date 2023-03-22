@@ -11,9 +11,11 @@ var (
 	db *gorm.DB
 
 	Commands = []Cmd{
+		&ProgramsCmd{},
 		&AddProgramsCmd{},
 		&ListProgramsCmd{},
 		&DeleteProgramsCmd{},
+		&SubdomainsCmd{},
 		&SaveSubdomainsCmd{},
 		&QuerySubdomainsCmd{},
 		&TagSubdomainsCmd{},

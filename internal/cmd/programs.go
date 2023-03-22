@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/integrii/flaggy"
 )
 
@@ -39,4 +40,14 @@ func init() {
 	programsCmd.AttachSubcommand(deleteProgramsCmd, 1)
 
 	flaggy.AttachSubcommand(programsCmd, 1)
+}
+
+type ProgramsCmd struct{}
+
+func (c *ProgramsCmd) ShouldHandle() bool {
+	return programsCmd.Used
+}
+
+func (c *ProgramsCmd) Handle() {
+	fmt.Print("programs\n\n  Usage:\n    programs [add|delete|list]\n\n")
 }

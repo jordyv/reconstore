@@ -72,3 +72,13 @@ func applySubdomainQueryFilters(d *gorm.DB) {
 		d.Joins("LEFT JOIN subdomain_tags ON subdomains.id = subdomain_tags.subdomain_id LEFT JOIN tags ON tags.id = subdomain_tags.tag_id").Where("tags.name = ?", queryTag)
 	}
 }
+
+type SubdomainsCmd struct{}
+
+func (c *SubdomainsCmd) ShouldHandle() bool {
+	return subdomainsCmd.Used
+}
+
+func (c *SubdomainsCmd) Handle() {
+	fmt.Print("subdomains\n\n  Usage:\n    subdomains [query|save|tag]\n\n")
+}

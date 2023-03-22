@@ -1,13 +1,17 @@
 # Reconstore
 
 Reconstore is a tool for saving and querying your recon data. You can pipe subdomains and output of your favorite tools to reconstore to build up 
-your own recon database. All information is stored in a Sqlite file so you can run your own queries if you like.
+your own recon database. All information is stored in a Sqlite file or Postgres so you can run your own queries if you like.
 
 ## Installation
 
 ```
-go get -u github.com/jordyv/reconstore/cmd/reconstore
+go install -u github.com/jordyv/reconstore/cmd/reconstore@latest
 ```
+
+## Configuration
+
+Make sure there's a `reconstore.yaml` file in your home directory or the current directory. You can use `reconstore.example.yaml` as example.
 
 ## Usage
 
@@ -69,9 +73,9 @@ You can use the same queries as for the `subdomains query` command.
 ## Planned features
 
 - [x] DNS resolution on import of subdomains
-- [ ] Query DNS info
+- [x] Query DNS info
 - [x] HTTP info - webserver, status code, title
 - [ ] Techs to tags - scrape HTTP, fetch technologies and store in DB
 - [ ] Import nmap port scan results
-- [ ] GraphQL API
+- [ ] (GraphQL) API
 - [ ] Web interface

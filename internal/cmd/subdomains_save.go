@@ -39,8 +39,10 @@ func (c *SaveSubdomainsCmd) Handle() {
 				db.Model(&entities.Subdomain{}).Where("domain = ?", domain).Count(&countExisting)
 				if countExisting == 0 {
 					s := &entities.Subdomain{
-						Domain:  domain,
-						Program: program,
+						Domain: domain,
+					}
+					if program.ID != 0 {
+						s.Program = &program
 					}
 					db.Create(s)
 
@@ -66,14 +68,12 @@ func (c *SaveSubdomainsCmd) Handle() {
 }
 
 func (c *SaveSubdomainsCmd) validate() {
-	if saveProgramSlug == "" {
-		logrus.Fatal("Program slug is required")
-	}
+	if saveProgramSlug != "" {
+		var count int64
+		db.Model(&entities.Program{}).Where("slug = ?", saveProgramSlug).Count(&count)
 
-	var count int64
-	db.Model(&entities.Program{}).Where("slug = ?", saveProgramSlug).Count(&count)
-
-	if count == 0 {
-		logrus.Fatalf("No program with slug '%s' found", saveProgramSlug)
+		if count == 0 {
+			logrus.Fatalf("No program with slug '%s' found", saveProgramSlug)
+		}
 	}
 }

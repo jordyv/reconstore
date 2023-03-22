@@ -62,7 +62,7 @@ func (d *DNS) AfterSave(s *entities.Subdomain) error {
 		dnsInfo.NSRecords = strings.Join(nsRecords, ",")
 	}
 
-	s.DNSInfo = dnsInfo
+	s.DNSInfo = &dnsInfo
 	d.db.Save(s)
 
 	return nil

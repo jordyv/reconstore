@@ -2,6 +2,7 @@ package subdomainimport
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/gocolly/colly"
@@ -45,6 +46,12 @@ func (h *HTTP) AfterSave(s *entities.Subdomain) error {
 		if c := r.Headers.Get("Content-Type"); c != "" {
 			httpInfo.ContentType = c
 		}
+		if h := r.Headers; h != nil {
+			httpInfo.AllHeaders = make(map[string]string)
+			for k, v := range *h {
+				httpInfo.AllHeaders[k] = strings.Join(v, ",")
+			}
+		}
 	})
 	httpsScraper.OnHTML("title", func(e *colly.HTMLElement) {
 		httpInfo.Title = e.Text
@@ -69,7 +76,7 @@ func (h *HTTP) AfterSave(s *entities.Subdomain) error {
 	})
 	httpScraper.Visit(httpAddr)
 
-	s.HTTPInfo = httpInfo
+	s.HTTPInfo = &httpInfo
 	h.db.Save(s)
 
 	return nil
