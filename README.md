@@ -13,6 +13,12 @@ go install github.com/jordyv/reconstore/cmd/reconstore@latest
 
 Make sure there's a `reconstore.yaml` file in your home directory or the current directory. You can use `reconstore.example.yaml` as example.
 
+## Supported databases:
+Currently, the following databases are supported:
+- Postgres
+- Sqlite
+- DuckDB
+
 ## Usage
 
 ### Programs

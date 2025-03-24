@@ -1,6 +1,8 @@
 package cmd
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Cmd interface {
 	ShouldHandle() bool

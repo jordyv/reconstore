@@ -14,8 +14,8 @@ func Initialize(fileName string) {
 	if dir != "" {
 		viper.AddConfigPath(dir)
 	}
-	viper.AddConfigPath("$HOME")
 	viper.AddConfigPath(".")
+	viper.AddConfigPath("$HOME")
 
 	initDefaults()
 

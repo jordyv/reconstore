@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/alifiroozi80/duckdb"
 	"github.com/integrii/flaggy"
 	"github.com/jordyv/reconstore/internal/cmd"
 	"github.com/jordyv/reconstore/internal/config"
@@ -42,6 +43,8 @@ func getDBDialector() gorm.Dialector {
 	switch dbType {
 	case "sqlite":
 		return sqlite.Open(dbConnString)
+	case "duckdb":
+		return duckdb.Open(dbConnString)
 	case "postgres":
 		return postgres.Open(dbConnString)
 	default:
