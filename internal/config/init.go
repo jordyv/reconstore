@@ -26,7 +26,8 @@ func Initialize(fileName string) {
 }
 
 func initDefaults() {
-	viper.SetDefault(DBType, "sqlite://reconstore.db")
+	viper.SetDefault(DBType, "sqlite")
+	viper.SetDefault(DBConnectionString, "reconstore.db")
 }
 
 func GetString(c string) string {

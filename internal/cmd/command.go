@@ -24,6 +24,9 @@ var (
 		&JsonCmd{},
 		&ListTechsCmd{},
 		&TechsCmd{},
+		&QueryHostsCmd{},
+		&HostsCmd{},
+		&InfoCmd{},
 	}
 
 	queryProgramSlug, queryDomainLike, queryTag, queryTech string
