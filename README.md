@@ -6,7 +6,7 @@ your own recon database. All information is stored in a Sqlite file or Postgres 
 ## Installation
 
 ```
-go install -u github.com/jordyv/reconstore/cmd/reconstore@latest
+go install github.com/jordyv/reconstore/cmd/reconstore@latest
 ```
 
 ## Configuration
