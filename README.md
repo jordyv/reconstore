@@ -62,6 +62,15 @@ Subdomains with a search query:
 reconstore subdomains query --pattern docs
 ```
 
+Subdomains with a specific technology:
+```
+reconstore subdomains query --tech php
+```
+You can find all the technologies with:
+```
+reconstore techs list
+```
+
 #### JSON output
 This will output all Tesla subdomains in the database as JSON:
 ```

@@ -1,6 +1,6 @@
 module github.com/jordyv/reconstore
 
-go 1.18
+go 1.23
 
 require (
 	github.com/gobeam/stringy v0.0.4

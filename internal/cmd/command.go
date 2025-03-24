@@ -20,6 +20,8 @@ var (
 		&TagSubdomainsCmd{},
 		&SubdomainsCmd{},
 		&JsonCmd{},
+		&ListTechsCmd{},
+		&TechsCmd{},
 	}
 
 	queryProgramSlug, queryDomainLike, queryTag, queryTech string
