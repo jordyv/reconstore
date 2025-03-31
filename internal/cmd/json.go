@@ -18,6 +18,7 @@ func init() {
 	jsonCmd.String(&queryProgramSlug, "s", "slug", "Program slug")
 	jsonCmd.String(&queryDomainLike, "p", "pattern", "Domain pattern")
 	jsonCmd.String(&queryTag, "t", "tag", "Query by tag")
+	jsonCmd.String(&queryTech, "e", "tech", "Query by tech")
 	jsonCmd.Bool(&queryHasBounties, "b", "bounties", "Belongs to a paying program")
 	jsonCmd.Bool(&queryPrivate, "z", "private", "Belongs to a private program")
 	flaggy.AttachSubcommand(jsonCmd, 1)
