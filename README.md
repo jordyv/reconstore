@@ -17,7 +17,6 @@ Make sure there's a `reconstore.yaml` file in your home directory or the current
 Currently, the following databases are supported:
 - Postgres
 - Sqlite
-- DuckDB
 
 ## Usage
 

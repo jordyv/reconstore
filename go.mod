@@ -18,8 +18,6 @@ require (
 	gorm.io/gorm v1.25.12
 )
 
-replace github.com/alifiroozi80/duckdb v1.0.0 => github.com/jordyv/duckdb v0.0.0-20250324104218-c8ad9fd8288c
-
 require (
 	github.com/PuerkitoBio/goquery v1.7.1 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
