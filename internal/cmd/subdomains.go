@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/integrii/flaggy"
 )
 
@@ -14,6 +15,7 @@ var (
 	saveThreads     int = 12
 	saveProgramSlug string
 	update          bool
+	disableHooks    bool
 
 	tags []string
 )
@@ -24,6 +26,7 @@ func init() {
 	saveSubdomainsCmd = flaggy.NewSubcommand("save")
 	saveSubdomainsCmd.String(&saveProgramSlug, "p", "program", "Program slug")
 	saveSubdomainsCmd.Bool(&update, "u", "update", "Update if already stored")
+	saveSubdomainsCmd.Bool(&disableHooks, "dh", "disable-hooks", "Don't run the hooks (DNS and probe) after saving")
 	saveSubdomainsCmd.Int(&saveThreads, "t", "threads", "Number of threads")
 	subdomainsCmd.AttachSubcommand(saveSubdomainsCmd, 1)
 

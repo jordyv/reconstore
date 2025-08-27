@@ -64,7 +64,9 @@ func (c *SaveSubdomainsCmd) Handle() {
 					updateCount++
 				}
 
-				hooks.TriggerAfterSubdomainSave(&s)
+				if !disableHooks {
+					hooks.TriggerAfterSubdomainSave(&s)
+				}
 
 				logrus.Infof("Saved %s", domain)
 			}
